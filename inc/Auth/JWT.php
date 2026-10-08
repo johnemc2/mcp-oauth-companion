@@ -41,13 +41,13 @@ class JWT {
 	 * Decode and verify a JWT.
 	 *
 	 * Returns null if the signature is invalid or (when $verify_expiry is true)
-	 * the token has expired.  Pass false for $verify_expiry when the caller
-	 * needs to act on an expired token — e.g. the revocation endpoint, which
-	 * must accept expired tokens per RFC 7009.
+	 * the token has expired or lacks a valid integer expiration. Pass false for
+	 * $verify_expiry when the caller needs to act on an expired token — e.g.
+	 * the revocation endpoint, which accepts expired tokens per RFC 7009.
 	 *
 	 * @param string $token         JWT string.
 	 * @param string $secret        HMAC signing secret.
-	 * @param bool   $verify_expiry Whether to reject tokens whose exp has passed.
+	 * @param bool   $verify_expiry Whether to require a future integer exp claim.
 	 * @return array<string, mixed>|null Decoded payload, or null on failure.
 	 */
 	public static function decode( string $token, string $secret, bool $verify_expiry = true ): ?array {
@@ -76,7 +76,7 @@ class JWT {
 			return null;
 		}
 
-		if ( $verify_expiry && isset( $payload['exp'] ) && (int) $payload['exp'] < time() ) {
+		if ( $verify_expiry && ( ! isset( $payload['exp'] ) || ! is_int( $payload['exp'] ) || $payload['exp'] <= time() ) ) {
 			return null;
 		}
 
