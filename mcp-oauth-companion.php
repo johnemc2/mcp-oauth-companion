@@ -2,7 +2,7 @@
 /**
  * Plugin Name: MCP OAuth Companion
  * Description: OAuth endpoints and authenticated MCP transport using WP Media MCP OAuth library with the separately installed WordPress MCP Adapter.
- * Version: 0.6.1
+ * Version: 0.6.2
  * Requires PHP: 8.2
  * Author: Jonathan Grice and Sol
  * License: GPL-3.0-or-later
